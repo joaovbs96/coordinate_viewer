@@ -7,6 +7,39 @@
       margin: 0;
     }
 
+    .split {
+      height: 100%;
+      width: 50%;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      overflow-x: hidden;
+      padding-top: 20px;
+    }
+
+    .left {
+      left: 0;
+      background-color: #111;
+    }
+
+    .right {
+      right: 0;
+      background-color: red;
+    }
+
+    .centered {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .centered img {
+      width: 150px;
+      border-radius: 50%;
+    }
+
     canvas {
       display: block;
     }
@@ -16,20 +49,30 @@
 <body>
   <script src="js/three.js"></script>
   <script>
+    // create scene
     var scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xffffff); // Set background color of the scene to white
+
+    // create camera
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 5;
 
+    // append conteiner to the right box
+    container = document.getElementById('right_box');
+    document.body.appendChild(container);
+
+    // create renderer
     var renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
 
+    // add cube
     var geometry = new THREE.BoxGeometry();
     var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     var cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
 
-    camera.position.z = 5;
-
+    // animate the scene
     var animate = function () {
       requestAnimationFrame(animate);
 
@@ -41,6 +84,20 @@
 
     animate();
   </script>
+
+  <div class="split left">
+    <div class="centered">
+      <h2>Jane Flex</h2>
+      <p>Some text.</p>
+    </div>
+  </div>
+
+  <div class="split right" id="right_box">
+    <div class="centered">
+      <h2>John Doe</h2>
+      <p>Some text here too.</p>
+    </div>
+  </div>
 </body>
 
 </html>
