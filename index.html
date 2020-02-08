@@ -3,9 +3,9 @@
 <head>
   <title>My first three.js app</title>
   <style>
-    .split,
-    .gutter.gutter-horizontal {
-      float: left;
+    .flex {
+      display: flex;
+      flex-direction: row;
     }
 
     .gutter.gutter-horizontal {
@@ -18,12 +18,19 @@
   <script src="js/three.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.5.11/split.min.js"></script>
   <script>
-    Split(['#one', '#two']);
+    Split(['#one', '#two'], {
+      elementStyle: (dimension, size, gutterSize) => ({
+        'flex-basis': `calc(${size}% - ${gutterSize}px)`,
+      }),
+      gutterStyle: (dimension, gutterSize) => ({
+        'flex-basis': `${gutterSize}px`,
+      }),
+    })
   </script>
 
-  <div>
-    <div class="split" id="one">one</div>
-    <div class="split" id="two">two</div>
+  <div class="flex">
+    <div id="one">one</div>
+    <div id="two">two</div>
   </div>
 
 </html>
