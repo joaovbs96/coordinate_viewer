@@ -3,9 +3,32 @@
 <head>
   <title>My first three.js app</title>
   <style>
-    .flex {
+    body {
+      margin: 0;
+      font-size: 16pt;
+    }
+
+    #editor {
       display: flex;
-      flex-direction: row;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #controls {
+      background: #AAA;
+      padding: 5px;
+    }
+
+    #c {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .gutter {
+      background-color: #eee;
+      background-repeat: no-repeat;
+      background-position: 50%;
     }
 
     .gutter.gutter-horizontal {
@@ -15,22 +38,41 @@
 </head>
 
 <body>
-  <script src="js/three.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.5.11/split.min.js"></script>
-  <script>
-    Split(['#one', '#two'], {
-      elementStyle: (dimension, size, gutterSize) => ({
-        'flex-basis': `calc(${size}% - ${gutterSize}px)`,
-      }),
-      gutterStyle: (dimension, gutterSize) => ({
-        'flex-basis': `${gutterSize}px`,
-      }),
-    })
-  </script>
+  <script>// Three.js - Responsive Editor
+    // from https://threejsfundamentals.org/threejs/threejs-responsive-editor.html
 
-  <div class="flex">
-    <div id="one">one</div>
-    <div id="two">two</div>
+
+    /* global Split */
+
+    // This code is only related to handling the split.
+    // Our three.js code has not changed
+    Split(['#view', '#controls'], {  // eslint-disable-line new-cap
+      sizes: [75, 25],
+      minSize: 100,
+      elementStyle: (dimension, size, gutterSize) => {
+        return {
+          'flex-basis': `calc(${size}% - ${gutterSize}px)`,
+        };
+      },
+      gutterStyle: (dimension, gutterSize) => {
+        return {
+          'flex-basis': `${gutterSize}px`,
+        };
+      },
+    });
+  </script>
+  <div id="editor">
+    <div id="view"><canvas id="c"></canvas></div>
+    <div id="controls">
+      <div>
+        <p>various controls
+          would appear here</p>
+        <div>Drag this bar</div>
+        <div>⇐</div>
+      </div>
+    </div>
   </div>
+  <script type="module" src="https://threejsfundamentals.org/threejs/threejs-responsive.js"></script>
+  <script src="https://threejsfundamentals.org/threejs/../3rdparty/split.min.js"></script>
 
 </html>
