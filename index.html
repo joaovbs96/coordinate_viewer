@@ -78,18 +78,17 @@
       }
     }
 
-    /* animate the scene */
-    var animate = function () {
+    function animate(time) {
       resizeCanvasToDisplaySize();
 
       cube.rotation.x += 0.01;
       cube.rotation.y += 0.01;
 
-      requestAnimationFrame(animate);
       renderer.render(scene, camera);
-    };
+      requestAnimationFrame(animate);
+    }
 
-    animate();
+    requestAnimationFrame(animate);
   </script>
 
   <div class="frame">
