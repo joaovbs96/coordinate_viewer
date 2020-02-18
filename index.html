@@ -18,17 +18,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
   <script>
     var scene = new THREE.Scene();
-
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    var geometry = new THREE.SphereGeometry(9, 12, 12);
-    const material = new THREE.MeshPhongMaterial({
-      color: 0x00ff00
-    });
+    var geometry = new THREE.BoxGeometry();
+    var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     var cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
 
@@ -47,7 +44,7 @@
   </script>
 
   <script>
-    /*var text;
+    var text;
     var sampleText = function () {
       this.message = "dat.gui";
       this.color = "#ff0000";
@@ -79,9 +76,10 @@
       gui.addColor(text, 'color').onChange(setValue);
       gui.add(text, 'fontSize', 6, 48).onChange(setValue);
       gui.add(text, 'border').onChange(setValue);
-    };*/
+    };
 
   </script>
+
 </body>
 
 </html>
