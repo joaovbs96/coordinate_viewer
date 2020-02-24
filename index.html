@@ -17,6 +17,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
   <script>
+    // DAT.GUI Related Stuff
+    var options = { coordinates: '0.0,0.0,0.0;1.0,1.0,1.0' };
+    var gui = new dat.GUI();
+    gui.add(options, 'coordinates').listen();
+
+    // TODO: keep status to prevent three from changing the geometry everytime
+
+    // Three.JS things
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
@@ -34,41 +42,47 @@
     var animate = function () {
       requestAnimationFrame(animate);
 
+      draw();
+
       cube.rotation.x += 0.01;
       cube.rotation.y += 0.01;
 
       renderer.render(scene, camera);
     };
-
     animate();
+
+    var draw = function () {
+      // update and split string
+      var str = options.coordinates.split(";");
+      str.forEach(arrayParse, str);
+
+      // arrayParse splits each substring into an array of 
+      // substrings of a single entry each
+      function arrayParse(item, index) {
+        this[index] = item.split(",");
+        this[index].forEach(coordParse, this[index]);
+
+        // converts each coord into a float number
+        function coordParse(item, index) {
+          this[index] = parseFloat(item);
+        }
+      }
+
+      // remove geometry from the previous iteration
+      while (scene.children.length > 0) {
+        scene.remove(scene.children[0]);
+      }
+
+      var geometry = new THREE.BufferGeometry();
+      geometry.addAttribute("position", new THREE.BufferAttribute(new Float32Array(str), 3));
+
+      var points = new THREE.Points(geometry, shadermaterial);
+      points.name = "points";
+      scene.add(points);
+    };
+
   </script>
 
-  <script>
-    // DAT.GUI Related Stuff
-
-    var gui = new dat.GUI();
-
-    var cam = gui.addFolder('Camera');
-    cam.add(options.camera, 'speed', 0, 0.0010).listen();
-    cam.add(camera.position, 'y', 0, 100).listen();
-    cam.open();
-
-    var velocity = gui.addFolder('Velocity');
-    velocity.add(options, 'velx', -0.2, 0.2).name('X').listen();
-    velocity.add(options, 'vely', -0.2, 0.2).name('Y').listen();
-    velocity.open();
-
-    var box = gui.addFolder('Cube');
-    box.add(cube.scale, 'x', 0, 3).name('Width').listen();
-    box.add(cube.scale, 'y', 0, 3).name('Height').listen();
-    box.add(cube.scale, 'z', 0, 3).name('Length').listen();
-    box.add(cube.material, 'wireframe').listen();
-    box.open();
-
-    gui.add(options, 'stop');
-    gui.add(options, 'reset');
-
-  </script>
 
 </body>
 
