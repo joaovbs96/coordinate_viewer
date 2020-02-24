@@ -65,10 +65,9 @@
         // converts each coord into a float number
         function coordParse(item, index) {
           this[index] = parseFloat(item);
+          console.log(this[index]);
         }
       }
-
-      console.log(str);
 
       // remove geometry from the previous iteration
       while (scene.children.length > 0) {
