@@ -68,11 +68,6 @@
         }
       }
 
-      // remove geometry from the previous iteration
-      while (scene.children.length > 0) {
-        scene.remove(scene.children[0]);
-      }
-
       var geometry = new THREE.BufferGeometry();
       geometry.addAttribute("position", new THREE.BufferAttribute(new Float32Array(str), 3));
 
