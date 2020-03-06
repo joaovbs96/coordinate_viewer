@@ -18,9 +18,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
   <script>
     // DAT.GUI Related Stuff
-    var options = { coordinates: '0.0,0.0,0.0;1.0,1.0,1.0' };
+    var options = { coordinates: '0.0,0.0,0.0;1.0,1.0,1.0;' };
     var gui = new dat.GUI();
     gui.add(options, 'coordinates').listen();
+
+    var str = options.coordinates.split(";");
+    console.log(str[0]);
 
     // TODO: keep status to prevent three from changing the geometry everytime
 
@@ -67,8 +70,6 @@
           this[index] = parseFloat(item);
         }
       }
-
-      console.table(str);
 
       // remove geometry from the previous iteration
       while (scene.children.length > 0) {
