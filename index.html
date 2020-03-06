@@ -18,7 +18,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
   <script>
     // DAT.GUI Related Stuff
-    var options = { coordinates: '2.0,0.0,0.0;1.0,1.0,1.0' };
+    var options = { coordinates: '3.0,0.0,0.0;1.0,1.0,1.0' };
     var gui = new dat.GUI();
     gui.add(options, 'coordinates').listen();
 
@@ -48,7 +48,6 @@
       var x = this[index][0];
       var y = this[index][1];
       var z = this[index][2];
-
 
       // converts each coord into a float number
       function coordParse(item, index) {
