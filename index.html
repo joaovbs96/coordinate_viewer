@@ -49,6 +49,7 @@
       var y = this[index][1];
       var z = this[index][2];
 
+
       // converts each coord into a float number
       function coordParse(item, index) {
         this[index] = parseFloat(item);
@@ -56,8 +57,8 @@
       }
 
       var point = new THREE.Mesh(geometry, material);
-      point.position = new THREE.Vector3(x, y, z);
       scene.add(position);
+      point.position.set(x, y, z);
     }
 
     var animate = function () {
