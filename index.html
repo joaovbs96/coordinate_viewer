@@ -18,12 +18,26 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
   <script>
     // DAT.GUI Related Stuff
-    var options = { coordinates: '0.0,0.0,0.0;1.0,1.0,1.0;' };
+    var options = { coordinates: '2.0,0.0,0.0;1.0,1.0,1.0;' };
     var gui = new dat.GUI();
     gui.add(options, 'coordinates').listen();
 
+    // update and split string
     var str = options.coordinates.split(";");
-    console.log(str[0]);
+    str.forEach(arrayParse, str);
+
+    // arrayParse splits each substring into an array of 
+    // substrings of a single entry each
+    function arrayParse(item, index) {
+      this[index] = item.split(",");
+      this[index].forEach(coordParse, this[index]);
+
+      // converts each coord into a float number
+      function coordParse(item, index) {
+        this[index] = parseFloat(item);
+        console.log(this[index]);
+      }
+    }
 
     // TODO: keep status to prevent three from changing the geometry everytime
 
