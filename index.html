@@ -33,7 +33,6 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    var geometry = new THREE.SphereGeometry(0.05);
     var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
     // update and split string
@@ -55,9 +54,10 @@
         console.log(this[index]);
       }
 
+      var center = new THREE.Vector3(x, y, z);
+      var geometry = new THREE.SphereGeometry(center, 0.05);
       var point = new THREE.Mesh(geometry, material);
-      scene.add(position);
-      point.position.set(x, y, z);
+      scene.add(point);
     }
 
     var animate = function () {
