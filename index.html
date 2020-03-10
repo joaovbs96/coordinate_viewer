@@ -55,7 +55,8 @@
       }
 
       var center = new THREE.Vector3(x, y, z);
-      var geometry = new THREE.SphereGeometry(center, 1);
+      var geometry = new THREE.SphereGeometry(0.5);
+      geometry.translate(x, y, z);
       var point = new THREE.Mesh(geometry, material);
       scene.add(point);
     }
@@ -68,36 +69,6 @@
       renderer.render(scene, camera);
     };
     animate();
-
-    var draw = function () {
-      // update and split string
-      var str = options.coordinates.split(";");
-      str.forEach(arrayParse, str);
-
-      // arrayParse splits each substring into an array of 
-      // substrings of a single entry each
-      function arrayParse(item, index) {
-        this[index] = item.split(",");
-        this[index].forEach(coordParse, this[index]);
-
-        // converts each coord into a float number
-        function coordParse(item, index) {
-          this[index] = parseFloat(item);
-        }
-      }
-
-      // remove geometry from the previous iteration
-      while (scene.children.length > 0) {
-        scene.remove(scene.children[0]);
-      }
-
-      var geometry = new THREE.BufferGeometry();
-      geometry.addAttribute("position", new THREE.BufferAttribute(new Float32Array(str), 3));
-
-      var points = new THREE.Points(geometry, material);
-      points.name = "points";
-      scene.add(points);
-    };
 
   </script>
 
