@@ -33,36 +33,54 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
+    // add axes
+    var axesHelper = new THREE.AxesHelper(10);
+    scene.add(axesHelper);
+
     var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    var strOld = "";
 
-    // update and split string
-    var str = options.coordinates.split(";");
-    str.forEach(arrayParse, str);
+    var draw = function () {
+      // update and split string
+      var str = options.coordinates.split(";");
+      str.forEach(arrayParse, str);
 
-    // arrayParse splits each substring into an array of 
-    // substrings of a single entry each
-    function arrayParse(item, index) {
-      this[index] = item.split(",");
-      this[index].forEach(coordParse, this[index]);
-      var x = this[index][0];
-      var y = this[index][1];
-      var z = this[index][2];
+      // arrayParse splits each substring into an array of 
+      // substrings of a single entry each
+      function arrayParse(item, index) {
+        this[index] = item.split(",");
+        this[index].forEach(coordParse, this[index]);
+        var x = this[index][0];
+        var y = this[index][1];
+        var z = this[index][2];
 
-      // converts each coord into a float number
-      function coordParse(item, index) {
-        this[index] = parseFloat(item);
-        console.log(this[index]);
+        // converts each coord into a float number
+        function coordParse(item, index) {
+          this[index] = parseFloat(item);
+          console.log(this[index]);
+        }
+
+        // add geometry to the scene with the parsed coordinates
+        var center = new THREE.Vector3(x, y, z);
+        var geometry = new THREE.SphereGeometry(0.05);
+        geometry.translate(x, y, z);
+        var point = new THREE.Mesh(geometry, material);
+        scene.add(point);
       }
-
-      var center = new THREE.Vector3(x, y, z);
-      var geometry = new THREE.SphereGeometry(0.5);
-      geometry.translate(x, y, z);
-      var point = new THREE.Mesh(geometry, material);
-      scene.add(point);
-    }
+    };
 
     var animate = function () {
-      //draw();
+      if (strOld.localeCompare(options.coordinates) != 0) {
+        // save old string
+        strOld = options.coordinates;
+
+        // clear scene
+        while (scene.children.length > 0) {
+          scene.remove(scene.children[0]);
+        }
+
+        draw(); // add new objects
+      }
 
       requestAnimationFrame(animate);
 
