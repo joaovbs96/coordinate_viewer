@@ -19,7 +19,11 @@
   <script src="js/OrbitControls.js"></script>
   <script>
     // DAT.GUI Related Stuff
-    var options = { coordinates: '4.0,0.0,0.0;1.0,1.0,1.0', background_color: "#ffffff", coord_color: "#1861b3" };
+    var options = {
+      coordinates: '4.0,0.0,0.0;1.0,1.0,1.0',
+      background_color: "#00ccff",
+      coord_color: "#0xff3333"
+    };
     var gui = new dat.GUI();
     gui.add(options, 'coordinates').listen();
 
@@ -36,24 +40,20 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
+    // Orbit Controls
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
 
-    window.addEventListener('resize', onWindowResize, false);
-
-    function onWindowResize() {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    }
-
     // add axes
-    var axesHelper = new THREE.AxesHelper(2);
-    scene.add(axesHelper);
+    var axes = new THREE.AxisHelper(100);
+    axes.geometry = new THREE.Geometry().fromBufferGeometry(axes.geometry);
+    scene.add(axes);
 
-    var material = new THREE.MeshBasicMaterial({ color: options.coord_color });
+    // create material for spheres
+    var material = new THREE.MeshBasicMaterial({ color: options.coord_color, flatShading: true });
+
+    // parse coords from string and add spheres to the scene
     var strOld = "";
-
     var draw = function () {
       // update and split string
       var str = options.coordinates.split(";");
@@ -76,14 +76,23 @@
 
         // add geometry to the scene with the parsed coordinates
         var center = new THREE.Vector3(x, y, z);
-        var geometry = new THREE.SphereGeometry(0.05);
+        var geometry = new THREE.SphereGeometry(0.02, 32, 32);
         geometry.translate(x, y, z);
         var point = new THREE.Mesh(geometry, material);
         scene.add(point);
       }
     };
 
+    // Windows Resize listener
+    window.addEventListener('resize', onWindowResize, false);
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
     var animate = function () {
+      // TODO: update material color
       // check if the scene contents have changed
       if (strOld.localeCompare(options.coordinates) != 0) {
         // save old string
