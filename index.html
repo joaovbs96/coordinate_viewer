@@ -36,7 +36,8 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    var controls = new THREE.OrbitControls(camera);
+    var controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
 
     window.addEventListener('resize', onWindowResize, false);
 
@@ -95,6 +96,8 @@
 
         draw(); // add new objects
       }
+
+      controls.update();
 
       // update background color
       scene.background = new THREE.Color(options.background_color);
