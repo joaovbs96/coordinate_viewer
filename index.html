@@ -21,8 +21,8 @@
     // DAT.GUI Related Stuff
     var options = {
       coordinates: '4.0,0.0,0.0;1.0,1.0,1.0',
-      background_color: "#00ccff",
-      coordinates_color: "#0xff3333"
+      background_color: [0, 204, 255],
+      coordinates_color: [255, 51, 51]
     };
     var gui = new dat.GUI();
     gui.add(options, 'coordinates').listen();
@@ -52,7 +52,7 @@
     // add unit sphere to the scene
     var unit_sphere = new THREE.SphereGeometry(1, 256, 256);
     var edges = new THREE.EdgesGeometry(unit_sphere);
-    var line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x0000 }));
+    var line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000000 }));
     scene.add(line);
 
     // create material for spheres
