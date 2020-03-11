@@ -50,19 +50,16 @@
     var worldAxis = new THREE.AxesHelper(20);
     scene.add(worldAxis);
 
-    // add unit sphere to the scene
-    var unit_sphere = new THREE.SphereGeometry(1, 256, 256);
-    var edges = new THREE.EdgesGeometry(unit_sphere);
-    var line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000000 }));
-    scene.add(line);
-
     // create material for spheres
-    var material = new THREE.MeshBasicMaterial({ color: options.coord_color });
+    //var material = new THREE.MeshBasicMaterial({ color: options.coord_color });
+    var dotMaterial = new THREE.PointsMaterial({ color: options.coord_color, size: 1, sizeAttenuation: false });
 
     // parse coords from string and add spheres to the scene
     var strOld = "";
     var colorOld = "";
     var draw = function () {
+      var dotGeometry = new THREE.Geometry();
+
       // update and split string
       var str = options.coordinates.split(";");
       str.forEach(arrayParse, str);
@@ -83,12 +80,17 @@
         }
 
         // add geometry to the scene with the parsed coordinates
-        var center = new THREE.Vector3(x, y, z);
+        /*var center = new THREE.Vector3(x, y, z);
         var geometry = new THREE.SphereGeometry(0.02, 128, 128);
         geometry.translate(x, y, z);
         var point = new THREE.Mesh(geometry, material);
-        scene.add(point);
+        scene.add(point);*/
+
+        dotGeometry.vertices.push(new THREE.Vector3(x, y, z));
       }
+
+      var dot = new THREE.Points(dotGeometry, dotMaterial);
+      scene.add(dot);
     };
 
     // Windows Resize listener
@@ -114,19 +116,13 @@
         var worldAxis = new THREE.AxesHelper(20);
         scene.add(worldAxis);
 
-        // add unit sphere to the scene
-        var unit_sphere = new THREE.SphereGeometry(1, 256, 256);
-        var edges = new THREE.EdgesGeometry(unit_sphere);
-        var line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000000 }));
-        scene.add(line);
-
         draw(); // add new objects
       }
 
       controls.update();
 
       // update spheres and background colors
-      material.color = new THREE.Color(options.coordinates_color);
+      dotMaterial.color = new THREE.Color(options.coordinates_color);
       scene.background = new THREE.Color(options.background_color);
 
       requestAnimationFrame(animate);
