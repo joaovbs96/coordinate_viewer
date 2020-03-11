@@ -22,10 +22,12 @@
     var options = {
       coordinates: '4.0,0.0,0.0;1.0,1.0,1.0',
       background_color: "#00ccff",
-      coord_color: "#0xff3333"
+      coordinates_color: "#0xff3333"
     };
     var gui = new dat.GUI();
     gui.add(options, 'coordinates').listen();
+    gui.add(options, 'background_color').listen();
+    gui.add(options, 'coordinates_color').listen();
 
     // scene settings
     var scene = new THREE.Scene();
@@ -49,11 +51,18 @@
     axes.geometry = new THREE.Geometry().fromBufferGeometry(axes.geometry);
     scene.add(axes);
 
+    // add unit sphere to the scene
+    var unit_sphere = new THREE.SphereGeometry(1, 256, 256);
+    var edges = new THREE.EdgesGeometry(unit_sphere);
+    var line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x0000 }));
+    scene.add(line);
+
     // create material for spheres
-    var material = new THREE.MeshBasicMaterial({ color: options.coord_color, flatShading: true });
+    var material = new THREE.MeshBasicMaterial({ color: options.coord_color });
 
     // parse coords from string and add spheres to the scene
     var strOld = "";
+    var colorOld = "";
     var draw = function () {
       // update and split string
       var str = options.coordinates.split(";");
@@ -76,7 +85,7 @@
 
         // add geometry to the scene with the parsed coordinates
         var center = new THREE.Vector3(x, y, z);
-        var geometry = new THREE.SphereGeometry(0.02, 32, 32);
+        var geometry = new THREE.SphereGeometry(0.02, 128, 128);
         geometry.translate(x, y, z);
         var point = new THREE.Mesh(geometry, material);
         scene.add(point);
@@ -92,7 +101,6 @@
     }
 
     var animate = function () {
-      // TODO: update material color
       // check if the scene contents have changed
       if (strOld.localeCompare(options.coordinates) != 0) {
         // save old string
@@ -108,7 +116,8 @@
 
       controls.update();
 
-      // update background color
+      // update spheres and background colors
+      material.color = new THREE.Color(options.coordinates_color);
       scene.background = new THREE.Color(options.background_color);
 
       requestAnimationFrame(animate);
