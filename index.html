@@ -47,7 +47,8 @@
     controls.enableDamping = true;
 
     // add axes
-    debugaxis(100);
+    var worldAxis = new THREE.AxesHelper(20);
+    sphere.add(worldAxis);
 
     // add unit sphere to the scene
     var unit_sphere = new THREE.SphereGeometry(1, 256, 256);
@@ -108,7 +109,16 @@
         while (scene.children.length > 0) {
           scene.remove(scene.children[0]);
         }
-        debugaxis(100);
+
+        // add axis
+        var worldAxis = new THREE.AxesHelper(20);
+        scene.add(worldAxis);
+
+        // add unit sphere to the scene
+        var unit_sphere = new THREE.SphereGeometry(1, 256, 256);
+        var edges = new THREE.EdgesGeometry(unit_sphere);
+        var line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000000 }));
+        scene.add(line);
 
         draw(); // add new objects
       }
@@ -124,26 +134,6 @@
       renderer.render(scene, camera);
     };
     animate();
-
-    function debugaxis(axisLength) {
-      //Shorten the vertex function
-      function v(x, y, z) {
-        return new THREE.Vertex(new THREE.Vector3(x, y, z));
-      }
-
-      //Create axis (point1, point2, colour)
-      function createAxis(p1, p2, color) {
-        var line, lineGeometry = new THREE.Geometry(),
-          lineMat = new THREE.LineBasicMaterial({ color: color, lineWidth: 1 });
-        lineGeometry.vertices.push(p1, p2);
-        line = new THREE.Line(lineGeometry, lineMat);
-        scene.add(line);
-      }
-
-      createAxis(v(-axisLength, 0, 0), v(axisLength, 0, 0), 0xFF0000);
-      createAxis(v(0, -axisLength, 0), v(0, axisLength, 0), 0x00FF00);
-      createAxis(v(0, 0, -axisLength), v(0, 0, axisLength), 0x0000FF);
-    };
 
   </script>
 
