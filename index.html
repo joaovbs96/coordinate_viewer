@@ -21,13 +21,17 @@
     // DAT.GUI Related Stuff
     var options = {
       coordinates: '4.0,0.0,0.0;1.0,1.0,1.0',
+      unit_sphere: false,
       background_color: "#00ccff",
-      coordinates_color: "#ff3333"
+      coordinates_color: "#ff3333",
+      unit_sphere_color: "#3D85C6"
     };
     var gui = new dat.GUI();
     gui.add(options, 'coordinates').listen();
+    gui.add(options, 'unit_sphere').listen();
     gui.addColor(options, 'background_color').listen();
     gui.addColor(options, 'coordinates_color').listen();
+    gui.addColor(options, 'unit_sphere_color').listen();
 
     // scene settings
     var scene = new THREE.Scene();
@@ -49,12 +53,14 @@
     var worldAxis = new THREE.AxesHelper(100);
     scene.add(worldAxis);
 
-    // create material for spheres
-    //var material = new THREE.MeshBasicMaterial({ color: options.coord_color });
-    var dotMaterial = new THREE.PointsMaterial({ size: 10, sizeAttenuation: false });
-    dotMaterial.color = options.coord_color;
+    // add geometry to the scene with the parsed coordinates
+    var us_material = new THREE.MeshBasicMaterial({ color: options.unit_sphere_color });
+    var us_geometry = new THREE.SphereGeometry(1, 512, 512);
+    var unit_sphere = new THREE.Mesh(us_geometry, us_material);
+    scene.add(unit_sphere);
 
     // parse coords from string and add spheres to the scene
+    var material = new THREE.MeshBasicMaterial({ color: options.coord_color });
     var draw = function () {
       var dotGeometry = new THREE.Geometry();
 
@@ -78,26 +84,15 @@
         }
 
         // add geometry to the scene with the parsed coordinates
-        /*var center = new THREE.Vector3(x, y, z);
-        var geometry = new THREE.SphereGeometry(0.02, 128, 128);
+        var geometry = new THREE.SphereGeometry(0.02, 256, 256);
         geometry.translate(x, y, z);
         var point = new THREE.Mesh(geometry, material);
-        scene.add(point);*/
-
-        dotGeometry.vertices.push(new THREE.Vector3(x, y, z));
+        scene.add(point);
       }
 
       var dot = new THREE.Points(dotGeometry, dotMaterial);
       scene.add(dot);
     };
-
-    // Windows Resize listener
-    window.addEventListener('resize', onWindowResize, false);
-    function onWindowResize() {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    }
 
     var strOld = "";
     var animate = function () {
@@ -119,14 +114,26 @@
       }
 
       // update spheres and background colors
-      dotMaterial.color = new THREE.Color(options.coordinates_color);
+      material.color = new THREE.Color(options.coordinates_color);
       scene.background = new THREE.Color(options.background_color);
+      us_material = new THREE.Color(options.unit_sphere_color);
+
+      // show or hide unit sphere
+      unit_sphere.visible = options.unit_sphere;
 
       requestAnimationFrame(animate);
 
       renderer.render(scene, camera);
     };
     animate();
+
+    // Windows Resize listener
+    window.addEventListener('resize', onWindowResize, false);
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
 
   </script>
 
