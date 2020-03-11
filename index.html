@@ -24,7 +24,8 @@
       unit_sphere: false,
       background_color: "#00ccff",
       coordinates_color: "#ff3333",
-      unit_sphere_color: "#3D85C6"
+      unit_sphere_color: "#3D85C6",
+      refresh: function () { }
     };
     var gui = new dat.GUI();
     gui.add(options, 'coordinates').listen();
@@ -32,6 +33,7 @@
     gui.addColor(options, 'background_color').listen();
     gui.addColor(options, 'coordinates_color').listen();
     gui.addColor(options, 'unit_sphere_color').listen();
+    gui.add(options, 'refresh');
 
     // scene settings
     var scene = new THREE.Scene();
@@ -62,7 +64,22 @@
     // parse coords from string and add spheres to the scene
     var material = new THREE.MeshBasicMaterial({ color: options.coord_color });
     var draw = function () {
-      var dotGeometry = new THREE.Geometry();
+      // clear scene
+      while (scene.children.length > 0) {
+        scene.remove(scene.children[0]);
+      }
+
+      // add axis
+      var worldAxis = new THREE.AxesHelper(20);
+      scene.add(worldAxis);
+
+      // update spheres and background colors
+      material.color = new THREE.Color(options.coordinates_color);
+      scene.background = new THREE.Color(options.background_color);
+      us_material = new THREE.Color(options.unit_sphere_color);
+
+      // show or hide unit sphere
+      unit_sphere.visible = options.unit_sphere;
 
       // update and split string
       var str = options.coordinates.split(";");
@@ -90,34 +107,10 @@
         scene.add(point);
       }
     };
+    options.refresh = draw();
+    draw();
 
-    var strOld = "";
     var animate = function () {
-      // check if the scene contents have changed
-      if (strOld.localeCompare(options.coordinates) != 0) {
-        // save old string
-        strOld = options.coordinates;
-
-        // clear scene
-        while (scene.children.length > 0) {
-          scene.remove(scene.children[0]);
-        }
-
-        // add axis
-        var worldAxis = new THREE.AxesHelper(20);
-        scene.add(worldAxis);
-
-        draw(); // add new objects
-      }
-
-      // update spheres and background colors
-      material.color = new THREE.Color(options.coordinates_color);
-      scene.background = new THREE.Color(options.background_color);
-      us_material = new THREE.Color(options.unit_sphere_color);
-
-      // show or hide unit sphere
-      unit_sphere.visible = options.unit_sphere;
-
       requestAnimationFrame(animate);
 
       renderer.render(scene, camera);
