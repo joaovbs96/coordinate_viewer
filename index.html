@@ -51,7 +51,8 @@
 
     // create material for spheres
     //var material = new THREE.MeshBasicMaterial({ color: options.coord_color });
-    var dotMaterial = new THREE.PointsMaterial({ color: options.coord_color, size: 1, sizeAttenuation: false });
+    var dotMaterial = new THREE.PointsMaterial({ size: 1, sizeAttenuation: false });
+    dotMaterial.color = options.coord_color;
 
     // parse coords from string and add spheres to the scene
     var draw = function () {
