@@ -44,10 +44,9 @@
 
     // Orbit Controls
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
 
     // add axes
-    var worldAxis = new THREE.AxesHelper(20);
+    var worldAxis = new THREE.AxesHelper(100);
     scene.add(worldAxis);
 
     // create material for spheres
@@ -55,8 +54,6 @@
     var dotMaterial = new THREE.PointsMaterial({ color: options.coord_color, size: 1, sizeAttenuation: false });
 
     // parse coords from string and add spheres to the scene
-    var strOld = "";
-    var colorOld = "";
     var draw = function () {
       var dotGeometry = new THREE.Geometry();
 
@@ -101,6 +98,7 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
+    var strOld = "";
     var animate = function () {
       // check if the scene contents have changed
       if (strOld.localeCompare(options.coordinates) != 0) {
@@ -118,8 +116,6 @@
 
         draw(); // add new objects
       }
-
-      controls.update();
 
       // update spheres and background colors
       dotMaterial.color = new THREE.Color(options.coordinates_color);
