@@ -21,13 +21,13 @@
     // DAT.GUI Related Stuff
     var options = {
       coordinates: '4.0,0.0,0.0;1.0,1.0,1.0',
-      background_color: [0, 204, 255],
-      coordinates_color: [255, 51, 51]
+      background_color: "#00ccff",
+      coordinates_color: "#0xff3333"
     };
     var gui = new dat.GUI();
     gui.add(options, 'coordinates').listen();
-    gui.add(options, 'background_color').listen();
-    gui.add(options, 'coordinates_color').listen();
+    gui.addColor(options, 'background_color').listen();
+    gui.addColor(options, 'coordinates_color').listen();
 
     // scene settings
     var scene = new THREE.Scene();
